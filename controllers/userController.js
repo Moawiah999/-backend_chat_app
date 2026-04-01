@@ -18,4 +18,15 @@ const loginUser = async (req, res) => {
     res.status(400).json({ success: false, message: error.message });
   }
 };
-module.exports = { register, loginUser };
+const allUsers = async (req, res) => {
+  try {
+    const email = req.user["email"];
+
+    const users = await userService.getAllUsers(email);
+
+    return res.status(200).json(users);
+  } catch (error) {
+    return res.status(500).json(error.message);
+  }
+};
+module.exports = { register, loginUser, allUsers };

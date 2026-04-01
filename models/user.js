@@ -22,4 +22,15 @@ const getUserByEmail = async ({ email, password }) => {
     console.log(error);
   }
 };
-module.exports = { createUser, getUserByEmail };
+const getAllUsers = async (email) => {
+  try {
+    const result = await pool.query(
+      `SELECT id ,name ,email ,gender FROM public.users WHERE users.email !=$1`,
+      [email],
+    );
+    return result.rows;
+  } catch (error) {
+    throw error;
+  }
+};
+module.exports = { createUser, getUserByEmail, getAllUsers };

@@ -47,4 +47,12 @@ const loginUser = async (userData) => {
     throw error;
   }
 };
-module.exports = { registerUser, loginUser };
+const getAllUsers = async (email) => {
+  try {
+    const allUsers = await userModels.getAllUsers(email);
+    return allUsers;
+  } catch (error) {
+    throw error;
+  }
+};
+module.exports = { registerUser, loginUser, getAllUsers };
