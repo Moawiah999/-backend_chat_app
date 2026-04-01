@@ -3,7 +3,7 @@ const {
   register,
   loginUser,
   allUsers,
-} = require("../controllers/userController");
+} = require("../controllers/user_controller");
 const { authentication } = require("../middleware/authentication");
 const userRouter = express.Router();
 userRouter.get("/", authentication, allUsers);
