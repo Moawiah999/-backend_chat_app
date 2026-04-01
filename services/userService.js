@@ -5,7 +5,6 @@ const registerUser = async (userData) => {
     const { password } = userData;
 
     const passwordHash = await bcrypt.hashSync(password, 10);
-    console.log("password_hash : ", passwordHash);
     const infoUsre = {
       ...userData,
       password: passwordHash,
@@ -18,4 +17,21 @@ const registerUser = async (userData) => {
     }
   }
 };
-module.exports = { registerUser };
+const loginUser = async (userData) => {
+  try {
+    const user = await userModels.getUserByEmail(userData);
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    const isMatch = await bcrypt.compare(userData.password, user.password);
+    if (!isMatch) {
+      throw new Error("Incorrect password");
+    }
+    const { password, ...userWithoutPassword } = user;
+    return userWithoutPassword;
+  } catch (error) {
+    throw error;
+  }
+};
+module.exports = { registerUser, loginUser };
