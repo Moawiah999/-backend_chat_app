@@ -1,5 +1,6 @@
 const userModels = require("../models/user");
 const bcrypt = require("bcryptjs");
+var jwt = require("jsonwebtoken");
 const registerUser = async (userData) => {
   try {
     const { password } = userData;
@@ -28,8 +29,20 @@ const loginUser = async (userData) => {
     if (!isMatch) {
       throw new Error("Incorrect password");
     }
-    const { password, ...userWithoutPassword } = user;
-    return userWithoutPassword;
+
+    const token = jwt.sign(
+      {
+        name: user.name,
+        email: user.email,
+        gender: user.gender,
+      },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "7d",
+      },
+    );
+
+    return token;
   } catch (error) {
     throw error;
   }

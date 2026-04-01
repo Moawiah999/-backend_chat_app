@@ -14,7 +14,7 @@ const createUser = async ({ name, email, password, gender }) => {
 const getUserByEmail = async ({ email, password }) => {
   try {
     const result = await pool.query(
-      `SELECT email,password from users WHERE email=$1`,
+      `SELECT name,email,password,gender from users WHERE email=$1`,
       [email],
     );
     return result.rows[0];
