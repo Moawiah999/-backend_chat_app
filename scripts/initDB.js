@@ -18,7 +18,8 @@ const createTables = async () => {
         user_id INT NOT NULL REFERENCES users(id),
         friend_id INT NOT NULL REFERENCES users(id),
         request_status VARCHAR(15) DEFAULT 'pending',
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        UNIQUE(user_id, friend_id)
       );
     `);
   } catch (err) {
