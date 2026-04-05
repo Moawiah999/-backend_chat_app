@@ -14,4 +14,21 @@ const createFriend = async (userId, friendId) => {
   }
 };
 
-module.exports = { createFriend };
+const getFriendRequests = async (userId) => {
+  try {
+    const result = await pool.query(`
+        SELECT users.id,
+        users.name,
+        users.email,
+        users.gender 
+        FROM friends
+        INNER JOIN users
+        ON friends.friend_id = users.id
+        WHERE friends.request_status='pending'
+        `);
+    return result.rows;
+  } catch (error) {
+    throw error;
+  }
+};
+module.exports = { createFriend, getFriendRequests };

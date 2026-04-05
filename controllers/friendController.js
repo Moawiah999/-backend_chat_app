@@ -17,5 +17,19 @@ const addFriend = async (req, res) => {
     return res.status(400).json({ success: false, message: error.message });
   }
 };
-
-module.exports = { addFriend };
+const getPendingRequests = async (req, res) => {
+  try {
+    const result = await friendService.getFriendRequests(req.user.id);
+    res.status(200).json({
+      success: true,
+      message: "get all Pending Requests",
+      data: result,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Failed to fetch friend requests",
+    });
+  }
+};
+module.exports = { addFriend, getPendingRequests };

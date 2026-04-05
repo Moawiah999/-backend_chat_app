@@ -9,4 +9,12 @@ const addFriend = async (userId, friendId) => {
     }
   }
 };
-module.exports = { addFriend };
+const getFriendRequests = async (userId) => {
+  try {
+    const result = await friendModels.getFriendRequests(userId);
+    return result;
+  } catch (error) {
+    throw error;
+  }
+};
+module.exports = { addFriend, getFriendRequests };
