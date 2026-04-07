@@ -17,4 +17,16 @@ const getFriendRequests = async (userId) => {
     throw error;
   }
 };
-module.exports = { addFriend, getFriendRequests };
+const rejectFriendRequest = async (userId, friendId) => {
+  try {
+    const result = await friendModels.rejectFriendRequest(userId, friendId);
+
+    if (result.success === false) {
+      throw new Error(result.message);
+    }
+    return result.success;
+  } catch (error) {
+    throw error;
+  }
+};
+module.exports = { addFriend, getFriendRequests, rejectFriendRequest };

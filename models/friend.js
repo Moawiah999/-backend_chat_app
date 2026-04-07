@@ -34,4 +34,19 @@ const getFriendRequests = async (userId) => {
     throw error;
   }
 };
-module.exports = { createFriend, getFriendRequests };
+const rejectFriendRequest = async (userId, friendId) => {
+  try {
+    const result = await pool.query(
+      `DELETE FROM friends WHERE user_id = $1 AND friend_id=$2`,
+      [userId, friendId],
+    );
+    if (result.rowCount === 0) {
+      return { success: false, message: "Friend request not found" };
+    }
+
+    return { success: true, message: "Friend request rejected successfully" };
+  } catch (error) {
+    throw error;
+  }
+};
+module.exports = { createFriend, getFriendRequests, rejectFriendRequest };

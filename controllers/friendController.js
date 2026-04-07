@@ -32,4 +32,21 @@ const getPendingRequests = async (req, res) => {
     });
   }
 };
-module.exports = { addFriend, getPendingRequests };
+const rejectFriendRequest = async (req, res) => {
+  try {
+    const result = await friendService.rejectFriendRequest(
+      req.user.id,
+      req.body.friend_id,
+    );
+    res.status(200).json({
+      success: true,
+      message: "friend request was successfully deleted",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+module.exports = { addFriend, getPendingRequests, rejectFriendRequest };
