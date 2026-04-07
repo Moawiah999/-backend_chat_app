@@ -25,7 +25,8 @@ const getUserByEmail = async ({ email, password }) => {
 const getAllUsers = async (email) => {
   try {
     const result = await pool.query(
-      `SELECT id ,name ,email ,gender FROM public.users WHERE users.email !=$1`,
+      `SELECT id ,name ,email ,gender FROM public.users WHERE 
+      users.email !=$1`,
       [email],
     );
     return result.rows;
