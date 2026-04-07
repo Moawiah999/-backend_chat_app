@@ -16,7 +16,8 @@ const createFriend = async (userId, friendId) => {
 
 const getFriendRequests = async (userId) => {
   try {
-    const result = await pool.query(`
+    const result = await pool.query(
+      `
         SELECT users.id,
         users.name,
         users.email,
@@ -24,8 +25,10 @@ const getFriendRequests = async (userId) => {
         FROM friends
         INNER JOIN users
         ON friends.friend_id = users.id
-        WHERE friends.request_status='pending'
-        `);
+        WHERE friends.request_status='pending' AND friends.user_id=$1
+        `,
+      [userId],
+    );
     return result.rows;
   } catch (error) {
     throw error;
