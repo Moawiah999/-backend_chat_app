@@ -18,15 +18,16 @@ const getFriendRequests = async (userId) => {
   try {
     const result = await pool.query(
       `
-        SELECT users.id,
-        users.name,
-        users.email,
-        users.gender 
-        FROM friends
-        INNER JOIN users
-        ON friends.friend_id = users.id
-        WHERE friends.request_status='pending' AND friends.user_id=$1
-        `,
+      SELECT users.id,
+      users.name,
+      users.email,
+      users.gender
+      FROM friends
+      INNER JOIN users
+      ON users.id=friends.user_id
+      WHERE friends.friend_id = $1
+      AND friends.request_status = 'pending'
+      `,
       [userId],
     );
     return result.rows;
