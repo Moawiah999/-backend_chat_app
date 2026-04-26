@@ -1,12 +1,12 @@
 const friendService = require("../services/friendServices");
 const addFriend = async (req, res) => {
   try {
-    if (!req.body.friend_id)
+    if (!req.body.receiver_id)
       return res.status(400).json({ message: "friend id is required" });
 
     const result = await friendService.addFriend(
       req.user.id,
-      req.body.friend_id,
+      req.body.receiver_id,
     );
     res
       .status(200)
@@ -36,7 +36,7 @@ const rejectFriendRequest = async (req, res) => {
   try {
     const result = await friendService.rejectFriendRequest(
       req.user.id,
-      req.body.friend_id,
+      req.body.receiver_id,
     );
     res.status(200).json({
       success: true,
@@ -49,4 +49,26 @@ const rejectFriendRequest = async (req, res) => {
     });
   }
 };
-module.exports = { addFriend, getPendingRequests, rejectFriendRequest };
+const acceptingFriendRequests = async (req, res) => {
+  try {
+    const result = await friendService.acceptingFriendRequests(
+      req.user.id,
+      req.body.receiver_id,
+    );
+    res.status(200).json({
+      success: true,
+      message: "friend request was successfully accepting",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+module.exports = {
+  addFriend,
+  getPendingRequests,
+  rejectFriendRequest,
+  acceptingFriendRequests,
+};

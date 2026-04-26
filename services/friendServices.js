@@ -29,4 +29,22 @@ const rejectFriendRequest = async (userId, friendId) => {
     throw error;
   }
 };
-module.exports = { addFriend, getFriendRequests, rejectFriendRequest };
+const acceptingFriendRequests = async (userId, friendId) => {
+  try {
+    const result = await friendModels.acceptingFriendRequests(userId, friendId);
+
+    if (result.success === false) {
+      throw new Error(result.message);
+    }
+    return result.success;
+  } catch (error) {
+    throw error;
+  }
+};
+
+module.exports = {
+  addFriend,
+  getFriendRequests,
+  rejectFriendRequest,
+  acceptingFriendRequests,
+};

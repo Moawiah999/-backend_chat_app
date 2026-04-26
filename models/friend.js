@@ -4,7 +4,7 @@ const createFriend = async (userId, friendId) => {
   try {
     const result = await pool.query(
       `
-      INSERT INTO friends (user_id,friend_id) VALUES ($1, $2) RETURNING *
+      INSERT INTO friends (sender_id,receiver_id) VALUES ($1, $2) RETURNING *
       `,
       [userId, friendId],
     );
@@ -24,8 +24,8 @@ const getFriendRequests = async (userId) => {
       users.gender
       FROM friends
       INNER JOIN users
-      ON users.id=friends.user_id
-      WHERE friends.friend_id = $1
+      ON users.id=friends.sender_id
+      WHERE friends.receiver_id = $1
       AND friends.request_status = 'pending'
       `,
       [userId],
@@ -38,7 +38,7 @@ const getFriendRequests = async (userId) => {
 const rejectFriendRequest = async (userId, friendId) => {
   try {
     const result = await pool.query(
-      `DELETE FROM friends WHERE user_id = $1 AND friend_id=$2`,
+      `DELETE FROM friends WHERE sender_id = $1 AND receiver_id=$2`,
       [userId, friendId],
     );
     if (result.rowCount === 0) {
@@ -50,4 +50,31 @@ const rejectFriendRequest = async (userId, friendId) => {
     throw error;
   }
 };
-module.exports = { createFriend, getFriendRequests, rejectFriendRequest };
+
+const acceptingFriendRequests = async (userId, friendId) => {
+  try {
+    const result = await pool.query(
+      `
+      UPDATE friends SET request_status = 'accepted' 
+      WHERE sender_id = $1 AND receiver_id=$2
+
+      `,
+      [userId, friendId],
+    );
+
+    if (result.rowCount === 0) {
+      return { success: false, message: "fail accepting Friend" };
+    }
+    return { success: true, message: "Friend request accepting successfully" };
+  } catch (error) {
+    console.log(error);
+
+    throw error;
+  }
+};
+module.exports = {
+  createFriend,
+  getFriendRequests,
+  rejectFriendRequest,
+  acceptingFriendRequests,
+};
