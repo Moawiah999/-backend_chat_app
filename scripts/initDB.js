@@ -15,11 +15,11 @@ const createTables = async () => {
     await pool.query(`
       CREATE TABLE IF NOT EXISTS friends (
         id SERIAL PRIMARY KEY,
-        user_id INT NOT NULL REFERENCES users(id),
-        friend_id INT NOT NULL REFERENCES users(id),
+        sender_id INT NOT NULL REFERENCES users(id),
+        receiver_id INT NOT NULL REFERENCES users(id),
         request_status VARCHAR(15) DEFAULT 'pending',
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        UNIQUE(user_id, friend_id)
+        UNIQUE(sender_id, receiver_id)
       );
     `);
   } catch (err) {
